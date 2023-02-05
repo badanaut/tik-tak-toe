@@ -33,6 +33,25 @@ const makeMove = (row, col) => {
   }
 };
 
+function computerChoose() {
+    let emptyCells = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[i][j] === null) {
+          emptyCells.push([i, j]);
+        }
+      }
+    }
+  
+    if (emptyCells.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      const [row, col] = emptyCells[randomIndex];
+      makeMove(row, col);
+      const id = `${row}-${col}`;
+      document.getElementById(id).textContent = getPlayer();
+    }
+  }
+
 const checkWinner = () => {
   // Check rows
   for (let i = 0; i < 3; i++) {
@@ -61,10 +80,10 @@ const checkWinner = () => {
 
 const play = (row, col) => {
   makeMove(row, col);
+  computerChoose();
   const winner = checkWinner();
   if (winner) {
     console.log(`Player ${winner} won the game!`);
-
     return;
   }
   console.log("No winner yet.");
