@@ -1,16 +1,9 @@
 const cells = document.querySelectorAll("td");
+const modal = document.getElementById("modal");
+const modalText = document.getElementById("modal-text");
+const close = document.querySelector(".close");
 
-cells.forEach((cell, index) => {
-  cell.addEventListener("click", () => {
-    const row = Math.floor(index / 3);
-    const col = index % 3;
-    play(row, col);
-    cell.textContent = grid[row][col];
-  });
-});
-
-
-const grid = [
+let grid = [
   [null, null, null],
   [null, null, null],
   [null, null, null]
@@ -47,7 +40,9 @@ function computerMove() {
       const randomIndex = Math.floor(Math.random() * emptyCells.length);
       const [row, col] = emptyCells[randomIndex];
       makeMove(row, col);
-      document.getElementById(`${row}-${col}`).textContent = grid[row][col];;
+      let cell = document.getElementById(`${row}-${col}`);
+      cell.textContent = grid[row][col];
+      cell.classList.add("no-click");
     }
   }
 
@@ -77,13 +72,61 @@ const checkWinner = () => {
   return null;
 };
 
+const resetGame = () => {
+    grid = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ];
+      cells.forEach(cell => {
+        cell.textContent = "";
+        cell.classList.remove("no-click");
+    });
+}
+
+// Show the modal and display the winner
+function showModal(message) {
+    modalText.textContent = message;
+    modal.style.display = "block";
+  }
+  
+  // Close the modal when the close button is clicked
+close.addEventListener("click", () => {
+    modal.style.display = "none";
+    resetGame();
+  });
+  
+  // Close the modal when the user clicks outside of the modal content
+window.addEventListener("click", event => {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      resetGame();
+    }
+  });
+
 const play = (row, col) => {
   makeMove(row, col);
   computerMove();
   const winner = checkWinner();
-  if (winner) {
-    console.log(`Player ${winner} won the game!`);
+  if (winner==="X") {
+    let message = ("Congratulations, you win!");
+    showModal(message);
+  }
+  else if (winner==="O") {
+    let message = ("Computer wins!");
+    showModal(message);    
+  }
+  else{
     return;
   }
-  console.log("No winner yet.");
 };
+
+cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+      const row = Math.floor(index / 3);
+      const col = index % 3;
+      play(row, col);
+      cell.textContent = grid[row][col];
+      cell.classList.add("no-click");
+    });
+  });
