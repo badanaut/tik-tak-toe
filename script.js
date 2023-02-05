@@ -33,7 +33,7 @@ const makeMove = (row, col) => {
   }
 };
 
-function computerChoose() {
+function computerMove() {
     let emptyCells = [];
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -47,8 +47,7 @@ function computerChoose() {
       const randomIndex = Math.floor(Math.random() * emptyCells.length);
       const [row, col] = emptyCells[randomIndex];
       makeMove(row, col);
-      const id = `${row}-${col}`;
-      document.getElementById(id).textContent = getPlayer();
+      document.getElementById(`${row}-${col}`).textContent = grid[row][col];;
     }
   }
 
@@ -80,7 +79,7 @@ const checkWinner = () => {
 
 const play = (row, col) => {
   makeMove(row, col);
-  computerChoose();
+  computerMove();
   const winner = checkWinner();
   if (winner) {
     console.log(`Player ${winner} won the game!`);
